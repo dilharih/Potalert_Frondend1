@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function UserDashboard({ onLogout }) {
+function UserDashboard({ onLogout, onBackToMap }) {
     const [showMenu, setShowMenu] = useState(false);
 
-    // Reports data
+    // Reports data (temporary – later from Firestore)
     const reports = [
         { id: "Pothole : 8", status: "Pending", location: "24.128,71.543" },
         { id: "Pothole : 7", status: "Repaired", location: "18.768,56.873" },
@@ -19,36 +19,51 @@ function UserDashboard({ onLogout }) {
         <div className="app">
             <div className="mobile-simulation">
                 <div className="dashboard">
-                    {/* Header Section */}
+
+                    {/* 🔝 HEADER */}
                     <div className="header">
+
+                        {/* ⬅️ Back to Map */}
+                        <button
+                            className="back-to-map-btn"
+                            onClick={onBackToMap}
+                        >
+                            ← Map
+                        </button>
+
+                        {/* Profile & Logout */}
                         <div className="profile-container">
                             <div
                                 className="avatar"
                                 onClick={() => setShowMenu(!showMenu)}
                                 style={{ cursor: 'pointer' }}
                             ></div>
+
                             {showMenu && (
                                 <div className="profile-dropdown">
-                                    <button className="logout-btn" onClick={handleLogout}>
+                                    <button
+                                        className="logout-btn"
+                                        onClick={handleLogout}
+                                    >
                                         Logout
                                     </button>
                                 </div>
                             )}
                         </div>
+
+                        {/* Greeting */}
                         <div className="greeting">
                             <span className="greeting-text">Hi, Username</span>
                         </div>
                     </div>
 
-                    {/* Stats Section */}
+                    {/* 📊 STATS */}
                     <div className="stats-section">
-                        {/* Reward Points Card */}
                         <div className="stat-card full-width">
                             <span className="stat-label">Reward Points</span>
                             <span className="stat-value">50</span>
                         </div>
 
-                        {/* Reported and Repaired Cards */}
                         <div className="stat-row">
                             <div className="stat-card square">
                                 <span className="stat-label-small">Reported</span>
@@ -61,19 +76,23 @@ function UserDashboard({ onLogout }) {
                         </div>
                     </div>
 
-                    {/* My Reports Section */}
+                    {/* 📄 MY REPORTS */}
                     <div className="reports-section">
                         <h2 className="section-title">My Reports</h2>
+
                         <div className="reports-container">
                             <div className="reports-list">
                                 {reports.map((report, index) => (
                                     <div key={index} className="report-item">
                                         <div className="report-header">
                                             <span className="report-id">{report.id}</span>
-                                            <span className={`report-status ${report.status.toLowerCase()}`}>
+                                            <span
+                                                className={`report-status ${report.status.toLowerCase()}`}
+                                            >
                                                 {report.status}
                                             </span>
                                         </div>
+
                                         <div className="report-location">
                                             <svg
                                                 className="location-icon"
@@ -86,16 +105,22 @@ function UserDashboard({ onLogout }) {
                                                     fill="#666"
                                                 />
                                             </svg>
-                                            <span className="location-text">{report.location}</span>
+                                            <span className="location-text">
+                                                {report.location}
+                                            </span>
                                         </div>
                                     </div>
                                 ))}
                             </div>
+
                             <div className="reports-footer">
-                                <button className="view-more-btn">Click To View More</button>
+                                <button className="view-more-btn">
+                                    Click To View More
+                                </button>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "./services/firebase";
+
 
 function AuthPage({ onLogin }) {
     const [userType, setUserType] = useState('citizen'); // 'citizen' or 'official'

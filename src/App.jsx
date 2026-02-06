@@ -1,57 +1,108 @@
-import React, { useState } from 'react';
-import './App.css';
-import HomeMap from './HomeMap';
-import AuthPage from './AuthPage';
-import UserDashboard from './UserDashboard';
-import OfficerDashboard from './OfficerDashboard';
-import FireForceDashboard from './FireForceDashboard';
-import KsebDashboard from './KsebDashboard';
-import AdminDashboard from './AdminDashboard';
+import React, { useState } from "react";
+import "./App.css";
+
+import HomeMap from "./HomeMap";
+import AuthPage from "./AuthPage";
+import UserDashboard from "./UserDashboard";
+import OfficerDashboard from "./OfficerDashboard";
+import FireForceDashboard from "./FireForceDashboard";
+import KsebDashboard from "./KsebDashboard";
+import AdminDashboard from "./AdminDashboard";
 
 function App() {
-  // Track current view state
-  const [currentView, setCurrentView] = useState('map'); // 'map', 'auth', 'user', 'officer', 'fire', 'kseb', 'admin'
+  const [currentView, setCurrentView] = useState("map");
+  const [userRole, setUserRole] = useState(null);
 
-  // Handle transition from HomeMap to AuthPage
+  // 🔐 Open login
   const handleSignIn = () => {
-    setCurrentView('auth');
+    setCurrentView("auth");
   };
 
-  // Handle transition from AuthPage to appropriate Dashboard
+  // 🔐 Login success → ALWAYS go back to map
   const handleLogin = (role) => {
-    setCurrentView(role); // role will be 'user', 'officer', 'fire', 'kseb', or 'admin'
+    setUserRole(role);
+    setCurrentView("map"); // ✅ THIS IS CRITICAL
   };
 
-  // Handle logout from any Dashboard back to HomeMap
+  // ⬅️ Back to map from dashboards
+  const handleBackToMap = () => {
+    setCurrentView("map");
+  };
+
+  // 🔓 Logout
   const handleLogout = () => {
-    setCurrentView('map'); // Or use 'auth' if you want to go to login page
+    setUserRole(null);
+    setCurrentView("map");
   };
 
-  // Render component based on currentView
-  switch (currentView) {
-    case 'map':
-      return <HomeMap onSignIn={handleSignIn} />;
+  // 👤 Profile button click
+  const handleProfileClick = () => {
+    if (!userRole) return;
+    setCurrentView(userRole);
+  };
 
-    case 'auth':
+  // 🔀 VIEW SWITCH
+  switch (currentView) {
+    case "map":
+      return (
+        <HomeMap
+          onSignIn={handleSignIn}
+          onProfileClick={handleProfileClick}
+          userRole={userRole}
+        />
+      );
+
+    case "auth":
       return <AuthPage onLogin={handleLogin} />;
 
-    case 'user':
-      return <UserDashboard onLogout={handleLogout} />;
+    case "user":
+      return (
+        <UserDashboard
+          onLogout={handleLogout}
+          onBackToMap={handleBackToMap}
+        />
+      );
 
-    case 'officer':
-      return <OfficerDashboard onLogout={handleLogout} />;
+    case "officer":
+      return (
+        <OfficerDashboard
+          onLogout={handleLogout}
+          onBackToMap={handleBackToMap}
+        />
+      );
 
-    case 'fire':
-      return <FireForceDashboard onLogout={handleLogout} />;
+    case "fire":
+      return (
+        <FireForceDashboard
+          onLogout={handleLogout}
+          onBackToMap={handleBackToMap}
+        />
+      );
 
-    case 'kseb':
-      return <KsebDashboard onLogout={handleLogout} />;
+    case "kseb":
+      return (
+        <KsebDashboard
+          onLogout={handleLogout}
+          onBackToMap={handleBackToMap}
+        />
+      );
 
-    case 'admin':
-      return <AdminDashboard onLogout={handleLogout} />;
+    case "admin":
+      return (
+        <AdminDashboard
+          onLogout={handleLogout}
+          onBackToMap={handleBackToMap}
+        />
+      );
 
     default:
-      return <HomeMap onSignIn={handleSignIn} />;
+      return (
+        <HomeMap
+          onSignIn={handleSignIn}
+          onProfileClick={handleProfileClick}
+          userRole={userRole}
+        />
+      );
   }
 }
 
